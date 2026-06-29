@@ -125,3 +125,15 @@ Production assets compile directly to the `/dist` directory.
    *   **Staff ID:** `SG-1924` (or any value)
    *   **Password:** `admin` (or any value)
 4. Click **Sign In** to navigate to `/staff/dashboard`.
+
+---
+
+## 6. Backend Integration Blueprint
+
+To transition from the current stateful mock client-side engine to your database and API services, your backend team should implement the following hooks:
+
+1. **Initial State API**: Hook up `GET /api/restaurant/state` in `StaffContext.jsx` to load menu catalog items, reservation registries, active floor tables, and waitlist queues.
+2. **Cart Checkout Dispatch**: Connect `POST /api/orders` in `CartContext.jsx` to write guest table checkouts directly into the database.
+3. **Live State Synchronization**: Implement WebSockets (`socket.io` or standard `ws`) to stream status broadcasts when staff members update dishes, seating arrangements, billing invoices, or order pipelines (updating guest tracked timelines instantly).
+
+*For database SQL schemas, REST contracts, and socket events, review the full **[Backend Integration Specification](backend_integration_guide.md)** in the project workspace.*
