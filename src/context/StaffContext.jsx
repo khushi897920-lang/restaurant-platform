@@ -973,26 +973,39 @@ export function StaffProvider({ children }) {
     }
   };
 
-  // Seating Guest from Queue to Table
-  const assignTable = async (queueId, tableId) => {
-    const guest = queue.find(q => q.id === queueId);
+  // Seating Guest from Queue or Reservation to Table
+  const assignTable = async (assignId, tableId) => {
+    let guest = queue.find(q => q.id === assignId);
+    let isReservation = false;
+    if (!guest) {
+      guest = reservations.find(r => r.id === assignId);
+      isReservation = !!guest;
+    }
     const table = tables.find(t => t.id === tableId);
     if (!guest || !table) return;
 
+    const guestName = guest.name || guest.guest;
+    const guestPartySize = guest.partySize;
+
     const isMock = localStorage.getItem('staffToken') === 'mock-jwt-token-for-preview-only';
     if (isMock) {
-      setQueue(prev => prev.filter(q => q.id !== queueId));
+      if (!isReservation) {
+        setQueue(prev => prev.filter(q => q.id !== assignId));
+      } else {
+        setReservations(prev => prev.map(r => r.id === assignId ? { ...r, table: tableId, status: 'seated' } : r));
+      }
       setTables(prev => prev.map(t => t.id === tableId ? {
         ...t,
         status: 'occupied',
-        guestName: guest.name,
+        guestName: guestName,
         arrivalTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        guestCount: guest.partySize
+        guestCount: guestPartySize,
+        reservationId: isReservation ? assignId : undefined
       } : t));
 
       logActivity(
-        `Guest ${guest.name} seated`,
-        `Assigned to Table ${tableId} from guest waitlist`,
+        `Guest ${guestName} seated`,
+        `Assigned to Table ${tableId}`,
         'check_circle',
         '/staff/tables'
       );
@@ -1001,7 +1014,7 @@ export function StaffProvider({ children }) {
 
     try {
       // Assign table session on backend and associate the reservation/walk-in guest
-      const res = await api.post(`/api/tables/${table._id}/assign`, { reservationId: queueId });
+      const res = await api.post(`/api/tables/${table._id}/assign`, { reservationId: assignId });
       const { qrDataUrl, token } = res.data;
       if (qrDataUrl && token) {
         const menuUrl = `${window.location.origin}/menu?token=${token}`;
@@ -1010,8 +1023,8 @@ export function StaffProvider({ children }) {
       await loadAllData();
 
       logActivity(
-        `Guest ${guest.name} seated`,
-        `Assigned to Table ${tableId} from guest waitlist`,
+        `Guest ${guestName} seated`,
+        `Assigned to Table ${tableId}`,
         'check_circle',
         '/staff/tables'
       );

@@ -110,6 +110,13 @@ export default function StaffTablesPage() {
   // Estimated order subtotal & details lookup
   const currentTableOrder = orders.find(o => o.table === selectedTableId);
 
+  const assignableParties = [
+    ...queue.map(q => ({ id: q.id, name: q.name, partySize: q.partySize, type: 'Waitlist' })),
+    ...reservations
+      .filter(r => r.status === 'confirmed' && (!r.table || r.table === 'T-??' || r.table === ''))
+      .map(r => ({ id: r.id, name: r.guest, partySize: r.partySize, type: 'Reservation' }))
+  ];
+
   const handleSeatParty = (queueId) => {
     if (!selectedTableId) return;
     assignTable(queueId, selectedTableId);
@@ -454,18 +461,18 @@ export default function StaffTablesPage() {
                       {/* Assign waitlist party selector */}
                       {showAssignForm ? (
                         <div className="p-4 border border-[#E5E1DA] bg-[#fdfcfb] space-y-4">
-                          <h4 className="font-serif text-sm font-semibold">Seat Waitlist Party</h4>
-                          {queue.length === 0 ? (
-                            <p className="text-xs text-subtle-text italic">No parties currently in guest queue.</p>
+                          <h4 className="font-serif text-sm font-semibold">Seat Party / Reservation</h4>
+                          {assignableParties.length === 0 ? (
+                            <p className="text-xs text-subtle-text italic">No parties currently in queue or confirmed reservations.</p>
                           ) : (
                             <div className="space-y-3">
                               <select 
                                 id="seat_party_select"
                                 className="w-full bg-[#f4f3f2] border border-[#E5E1DA] p-3 text-xs focus:outline-none cursor-pointer"
                               >
-                                {queue.map(guest => (
+                                {assignableParties.map(guest => (
                                   <option key={guest.id} value={guest.id}>
-                                    {guest.name} (Party of {guest.partySize})
+                                    {guest.name} (Party of {guest.partySize}) - {guest.type}
                                   </option>
                                 ))}
                               </select>
