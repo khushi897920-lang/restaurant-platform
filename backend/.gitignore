@@ -1,0 +1,14 @@
+# Environment variables — never commit this
+.env
+
+# Dependencies — reinstall with npm install
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
