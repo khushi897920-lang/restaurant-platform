@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 <br />
 
@@ -656,11 +656,12 @@ Distributed under the **MIT License**. See [`LICENSE`](./LICENSE) for details.
 
 ## 👥 Contributors
 
-<div align="center">
+We thank the following individuals who built and engineered Spice Garden:
 
-[![Contributors](https://contrib.rocks/image?repo=PARTHPANCHAL3656/restaurant-platform)](https://github.com/PARTHPANCHAL3656/restaurant-platform/graphs/contributors)
-
-</div>
+| Developer | Role | Profile |
+|---|---|---|
+| **Khushi Singh** | Frontend Lead Developer & UI/UX Architect | [@khushi897920-lang](https://github.com/khushi897920-lang) |
+| **Parth Panchal** | Backend Lead Developer & System Architect | [@PARTHPANCHAL3656](https://github.com/PARTHPANCHAL3656) |
 
 <br />
 
@@ -680,11 +681,10 @@ If you encounter a bug or need help:
 
 ## 📬 Contact
 
-| Channel | Link |
+| Contributor | GitHub Profile |
 |---|---|
-| GitHub | [@PARTHPANCHAL3656](https://github.com/PARTHPANCHAL3656) |
-| Email | your.email@example.com |
-| LinkedIn | [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile) |
+| **Khushi Singh** | [@khushi897920-lang](https://github.com/khushi897920-lang) |
+| **Parth Panchal** | [@PARTHPANCHAL3656](https://github.com/PARTHPANCHAL3656) |
 
 <br />
 
