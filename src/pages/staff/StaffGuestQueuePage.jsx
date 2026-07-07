@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useStaff } from '../../context/StaffContext';
 
 export default function StaffGuestQueuePage() {
-  const { queue, assignTable, addGuestToQueue, tables } = useStaff();
+  const { queue, assignTable, addGuestToQueue, tables, updateReservationStatus } = useStaff();
   const [selectedGuestId, setSelectedGuestId] = useState(null);
   
   const [showAddForm, setShowAddForm] = useState(false);
@@ -290,20 +290,43 @@ export default function StaffGuestQueuePage() {
 
             {/* Actions */}
             <div className="p-6 border-t border-[#E5E1DA] bg-[#fdfcfb] shrink-0">
-              <button 
-                onClick={() => {
-                  const selectEl = document.getElementById('table_assign_select');
-                  if (!selectEl) {
-                    alert('No table selected or available.');
-                    return;
-                  }
-                  handleSeatGuest(selectedGuest.id, selectEl.value);
-                }}
-                disabled={availableTables.length === 0}
-                className="w-full bg-saffron-gold text-ink-navy font-cta-label text-cta-label h-[56px] flex items-center justify-center uppercase tracking-widest hover:brightness-110 active:scale-98 transition-all duration-300 shadow-md disabled:opacity-55 disabled:cursor-not-allowed rounded-none cursor-pointer text-center"
-              >
-                Seat Party & Settle
-              </button>
+              {selectedGuest.status === 'pending' ? (
+                <div className="flex gap-4">
+                  <button 
+                    onClick={() => {
+                      updateReservationStatus(selectedGuest.id, 'confirmed');
+                      setSelectedGuestId(null);
+                    }}
+                    className="flex-1 bg-saffron-gold text-ink-navy font-cta-label text-cta-label h-[56px] flex items-center justify-center uppercase tracking-widest hover:brightness-110 active:scale-98 transition-all duration-300 shadow-md rounded-none cursor-pointer text-center font-bold"
+                  >
+                    Confirm
+                  </button>
+                  <button 
+                    onClick={() => {
+                      updateReservationStatus(selectedGuest.id, 'rejected');
+                      setSelectedGuestId(null);
+                    }}
+                    className="flex-1 bg-red-900/10 text-red-700 font-cta-label text-cta-label h-[56px] flex items-center justify-center uppercase tracking-widest hover:bg-red-900/20 active:scale-98 transition-all duration-300 rounded-none cursor-pointer text-center font-bold"
+                  >
+                    Reject
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={() => {
+                    const selectEl = document.getElementById('table_assign_select');
+                    if (!selectEl) {
+                      alert('No table selected or available.');
+                      return;
+                    }
+                    handleSeatGuest(selectedGuest.id, selectEl.value);
+                  }}
+                  disabled={availableTables.length === 0}
+                  className="w-full bg-saffron-gold text-ink-navy font-cta-label text-cta-label h-[56px] flex items-center justify-center uppercase tracking-widest hover:brightness-110 active:scale-98 transition-all duration-300 shadow-md disabled:opacity-55 disabled:cursor-not-allowed rounded-none cursor-pointer text-center"
+                >
+                  Seat Party & Settle
+                </button>
+              )}
             </div>
 
           </div>

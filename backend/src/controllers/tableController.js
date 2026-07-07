@@ -186,7 +186,8 @@ export const getWaitingList = async (req, res) => {
     const list = await Reservation.find({
       $or: [
         { status: "Waiting" },
-        { status: { $in: ["pending", "confirmed"] }, date: todayStr }
+        { status: "pending" }, // Pending reservations for any date (needs staff confirmation)
+        { status: "confirmed", date: todayStr } // Today's confirmed reservations (needs seating)
       ]
     }).sort({ date: 1, time: 1 })
     res.json(list)
