@@ -3,7 +3,7 @@
 <br />
 
 <!-- LOGO -->
-<img src="./docs/screenshots/logo.png" alt="Spice Garden Logo" width="120" height="120" style="border-radius: 16px" />
+<img src="./public/favicon.svg" alt="Spice Garden Logo" width="120" height="120" />
 
 <br />
 <br />
